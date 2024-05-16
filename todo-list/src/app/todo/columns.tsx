@@ -68,7 +68,7 @@ export const columns: ColumnDef<TTodoItemGridData>[] = [
     },
     {
         accessorKey: 'deadline_at',
-        accessorFn: (gridItem) => new Date(gridItem.deadline_at),
+        accessorFn: (gridItem) => gridItem.deadline_at,
         cell: props => <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger>{formatDate(new Date(props.row.original.deadline_at))}</TooltipTrigger>
