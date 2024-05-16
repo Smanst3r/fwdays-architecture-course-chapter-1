@@ -1,8 +1,9 @@
 import {cookies} from "next/headers";
-import {createClient} from "../../../../utils/supabase/server";
+import {createClient} from "@/../utils/supabase/server";
 import Form from "@/components/form";
-import {editTodoItem} from "../../../../actions/add-todo-item";
-import {fetchPriorities, TTodo} from "../../../../utils/supabase/service";
+import {editTodoItem} from "@/../actions/add-todo-item";
+import {fetchPriorities, TTodo} from "@/../utils/supabase/service";
+import BackButton from "@/components/back-button";
 
 const fetchTodo = async (id: number) => {
     const cookieStore = cookies();
@@ -30,7 +31,6 @@ export default async function Page(props: { params: { id: string } }) {
         return <div>Bad id </div>
     }
 
-
     const todoItem = await fetchTodo(todoId);
     if (!todoItem) {
         // TODO
@@ -38,9 +38,10 @@ export default async function Page(props: { params: { id: string } }) {
     }
 
     return <>
-        <h3>Edit {todoItem.todo}</h3>
-        <div>
-            <Form action={editTodoItem} priorities={priorities} todoItem={todoItem} />
+        <h3><strong>Edit</strong> {todoItem.todo}</h3>
+        <hr/>
+        <div className="pt-2">
+            <Form action={editTodoItem} priorities={priorities} todoItem={todoItem} FormFooter={<BackButton>Back</BackButton> } />
         </div>
     </>
 }

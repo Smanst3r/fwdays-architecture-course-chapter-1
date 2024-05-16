@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0.58 1.00 97%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -72,10 +72,14 @@
   }
   body {
     @apply bg-background text-foreground;
+    padding: 2rem;
   }
   input, select, textarea {
     border: 1px solid #ccc;
     border-radius: 0.25rem;
     padding: 0.5rem 0.75rem;
+  }
+  a {
+    @apply underline text-blue-600 hover:text-blue-800 visited:text-purple-600
   }
 }
