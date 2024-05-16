@@ -1,7 +1,7 @@
 import {cookies} from "next/headers";
 import {createClient} from "@/../utils/supabase/server";
 import Form from "@/components/form";
-import {editTodoItem} from "@/../actions/add-todo-item";
+import {editTodoItem} from "@/../actions/todo-item";
 import {fetchPriorities, TTodo} from "@/../utils/supabase/service";
 import HomeButton from "@/app/todo/[id]/home-button";
 

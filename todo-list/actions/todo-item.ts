@@ -52,3 +52,18 @@ export const editTodoItem = async (formData: FormData) => {
     // revalidatePath(`/todo/${id}`);
     revalidatePath(`/todo`);
 }
+
+export const toggleItemAccomplishedStatus = async (todoItemId: number, isAccomplished: boolean) => {
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+    if (!todoItemId) {
+        // TODO: bad todo item id
+        return;
+    }
+
+    const { error, data } = await supabase.from('todos').update({
+        is_accomplished: isAccomplished,
+    }).match({ id: todoItemId });
+
+    return error;
+}

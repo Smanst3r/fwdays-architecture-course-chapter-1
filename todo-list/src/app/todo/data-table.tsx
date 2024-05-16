@@ -30,6 +30,8 @@ import {
 
 import {useState} from "react";
 import {TPriority} from "../../../utils/supabase/service";
+import ToggleItemAccomplishedStatus from "@/components/toggle-item-accomplished-status";
+import {TTodoItemGridData} from "@/app/todo/page";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -109,7 +111,11 @@ export function DataTable<TData, TValue>({columns, data, priorities}: DataTableP
                                           data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            {
+                                                cell.column.id === 'is_accomplished'
+                                                ? <ToggleItemAccomplishedStatus todoItem={cell.row.original as TTodoItemGridData} />
+                                                : flexRender(cell.column.columnDef.cell, cell.getContext())
+                                            }
                                         </TableCell>
                                     ))}
                                 </TableRow>

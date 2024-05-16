@@ -4,7 +4,7 @@ import {TTodoItemGridData} from "@/app/todo/page";
 
 type TProps = {
     action: (formData: FormData) => void,
-    todoItem?: TTodoItemGridData|undefined
+    todoItem?: Omit<TTodoItemGridData, 'priorityData'>|undefined
     priorities: TPriority[]
     FormFooter?: React.ReactNode
 }
