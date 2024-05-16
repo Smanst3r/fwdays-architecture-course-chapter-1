@@ -74,7 +74,6 @@ export function DataTable<TData, TValue>({columns, data, priorities}: DataTableP
                     </Select>
                 </div>
 
-                {/* TODO: use Date range component from shadcn */}
                 <Input placeholder="Filter by deadline date..."
                        value={(table.getColumn("deadline_at")?.getFilterValue() as string) ?? ""}
                        onChange={(event) =>

@@ -10,7 +10,6 @@ type TProps = {
 }
 
 export const Form: React.FC<TProps> = ({ action, todoItem, priorities, FormFooter }) => {
-    console.log("T ", todoItem);
     return <form action={action} className="">
         <input type="hidden" name="id" value={todoItem && todoItem.id} />
         <label htmlFor="todo" className="">Title {}</label>

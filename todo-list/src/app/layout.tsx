@@ -4,6 +4,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils"
 import "./globals.css";
 
+// TODO: show success|error on CRUD todo item (try to make it with toast)
+// TODO: fix body is jumping on shadcn components click (select, dropdown, ...)
+// TODO: use Date range component for date filtering
+
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
