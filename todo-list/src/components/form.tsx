@@ -1,18 +1,18 @@
 import {TPriority, TTodo} from "../../utils/supabase/service";
 import {formatDate} from "../../utils/utils";
+import {TTodoItemGridData} from "@/app/todo/page";
 
 type TProps = {
-    action: (formData: FormData) => void
-    todoItem?: TTodo|undefined
+    action: (formData: FormData) => void,
+    todoItem?: TTodoItemGridData|TTodo|undefined
     priorities: TPriority[]
     FormFooter?: React.ReactNode
 }
 
 export const Form: React.FC<TProps> = ({ action, todoItem, priorities, FormFooter }) => {
-
     return <form action={action} className="">
         <input type="hidden" name="id" value={todoItem && todoItem.id} />
-        <label htmlFor="todo" className="">Title</label>
+        <label htmlFor="todo" className="">Title {}</label>
         <input type="text"
                name="todo"
                id="todo"

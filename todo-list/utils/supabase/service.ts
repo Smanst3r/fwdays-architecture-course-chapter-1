@@ -14,6 +14,7 @@ export type TTodo = {
 export type TPriority = {
     id: number
     priority: 'low'|'medium'|'high'
+    sort: number
 }
 
 export const fetchPriorities = async () => {
