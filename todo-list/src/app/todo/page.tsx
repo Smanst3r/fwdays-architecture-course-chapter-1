@@ -10,7 +10,7 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion";
 
-export type TTodoItemGridData = Omit<TTodo, 'priority'> & { priority: TPriority|undefined };
+export type TTodoItemGridData = TTodo & { priorityData: TPriority|undefined };
 export type TTodoGridData = TTodoItemGridData[];
 
 export default async function Home() {
@@ -20,7 +20,7 @@ export default async function Home() {
     // prepare data for grid
     const data: TTodoGridData = todoItems.map((item): TTodoItemGridData => {
         const priorityData = priorities.find(p => p.id === item.priority);
-        return {...item, priority: priorityData };
+        return {...item, priorityData: priorityData };
     });
 
     return (

@@ -47,7 +47,7 @@ export const columns: ColumnDef<TTodoItemGridData>[] = [
     },
     {
         accessorKey: 'priority',
-        accessorFn: (gridItem) => gridItem.priority?.priority ?? 'n/a',
+        accessorFn: (gridItem) => gridItem.priorityData?.priority ?? 'n/a',
         header: ({column}) => {
             return (
                 <Button
@@ -61,8 +61,8 @@ export const columns: ColumnDef<TTodoItemGridData>[] = [
         },
         sortingFn: (rowA, rowB) => {
             // desc order
-            const sortOrderA = rowA.original.priority?.sort ?? 0;
-            const sortOrderB = rowB.original.priority?.sort ?? 0;
+            const sortOrderA = rowA.original.priorityData?.sort ?? 0;
+            const sortOrderB = rowB.original.priorityData?.sort ?? 0;
             return sortOrderB - sortOrderA;
         }
     },

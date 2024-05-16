@@ -1,15 +1,16 @@
-import {TPriority, TTodo} from "../../utils/supabase/service";
+import {TPriority} from "../../utils/supabase/service";
 import {formatDate} from "../../utils/utils";
 import {TTodoItemGridData} from "@/app/todo/page";
 
 type TProps = {
     action: (formData: FormData) => void,
-    todoItem?: TTodoItemGridData|TTodo|undefined
+    todoItem?: TTodoItemGridData|undefined
     priorities: TPriority[]
     FormFooter?: React.ReactNode
 }
 
 export const Form: React.FC<TProps> = ({ action, todoItem, priorities, FormFooter }) => {
+    console.log("T ", todoItem);
     return <form action={action} className="">
         <input type="hidden" name="id" value={todoItem && todoItem.id} />
         <label htmlFor="todo" className="">Title {}</label>
@@ -44,7 +45,7 @@ export const Form: React.FC<TProps> = ({ action, todoItem, priorities, FormFoote
                 <label htmlFor="deadline" className="block">
                     Priority
                 </label>
-                <select name="priority" id="priority">
+                <select name="priority" id="priority" defaultValue={todoItem && todoItem.priority}>
                     {priorities.map(p => {
                         return <option key={p.id} value={p.id}>{p.priority}</option>
                     })}
