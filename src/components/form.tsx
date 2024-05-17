@@ -29,7 +29,7 @@ const useFormAction = (action: (formData: FormData) => Promise<{ error: string }
     const [state, setState] = useState<FormState>(initialState);
 
     const formAction = async (formData: FormData) => {
-        setState({...state, error: '', loading: true});
+        setState({error: '', loading: true, isOk: false});
         try {
             const result = await action(formData);
             setState({loading: false, error: result.error, isOk: Boolean(!result.error)});

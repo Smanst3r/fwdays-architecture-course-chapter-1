@@ -1,7 +1,6 @@
 import {cookies} from "next/headers";
 import {createClient} from "@/../utils/supabase/server";
 import Form from "@/components/form";
-import {editTodoItem} from "@/../actions/todo-item";
 import {fetchPriorities, TTodo} from "@/../utils/supabase/service";
 import HomeButton from "@/app/todo/[id]/home-button";
 
@@ -41,7 +40,7 @@ export default async function Page(props: { params: { id: string } }) {
         <h3><strong>Edit</strong> {todoItem.todo}</h3>
         <hr/>
         <div className="pt-2">
-            <Form action={editTodoItem} priorities={priorities} todoItem={todoItem} FormFooter={<HomeButton>Go Home</HomeButton>} />
+            <Form type="edit" priorities={priorities} todoItem={todoItem} FormFooter={<HomeButton>Go Home</HomeButton>} />
         </div>
     </>
 }

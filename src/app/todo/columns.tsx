@@ -20,7 +20,6 @@ import {TTodoItemGridData} from "@/app/todo/page";
 import ColumnDeleteTodoDropdownItem from "@/app/todo/column-delete-todo-dropdown-item";
 import {formatDate} from "../../../utils/utils";
 import EditTodoItemDialog from "@/components/edit-todo-item-dialog";
-import {editTodoItem} from "@/../../actions/todo-item";
 import {TPriority} from "../../../utils/supabase/service";
 import Link from "next/link";
 import {RiExternalLinkFill} from "react-icons/ri";
@@ -122,7 +121,7 @@ export const columns: ColumnDef<TTodoItemGridData>[] = [
                     <Link href={`/todo/${todoItem.id}`} target="_blank" rel="noopener noreferrer" title="Edit">
                         <RiExternalLinkFill style={{ display: 'inline' }} />
                     </Link>{' '}
-                    <EditTodoItemDialog formAction={editTodoItem} priorities={priorities} todoItem={todoItem} />
+                    <EditTodoItemDialog priorities={priorities} todoItem={todoItem} />
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
