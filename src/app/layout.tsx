@@ -29,7 +29,7 @@ export default function RootLayout({
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
       )}>
-      {children}
+      <main className="p-8">{children}</main>
       <Toaster />
       </body>
     </html>
