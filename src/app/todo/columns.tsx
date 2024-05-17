@@ -94,7 +94,7 @@ export const columns: ColumnDef<TTodoItemGridData>[] = [
             const priorities = (table.options.meta ?? []) as TPriority[];
 
             return (
-                <div className="flex items-center gap-1 justify-start">
+                <div className="flex items-center gap-2 justify-start text-lg">
                     <Link href={`/todo/${todoItem.id}`} target="_blank" rel="noopener noreferrer" title="Edit">
                         <RiExternalLinkFill style={{ display: 'inline' }} />
                     </Link>{' '}
