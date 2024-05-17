@@ -63,12 +63,17 @@ export function DataTable<TData, TValue>({columns, data, priorities}: DataTableP
             <div className="flex items-center py-4">
                 <div className="me-2">
                     <Select onValueChange={(value) => {
+                        if ('all' === value) {
+                            table.getColumn("priority")?.setFilterValue('');
+                            return;
+                        }
                         table.getColumn("priority")?.setFilterValue(value);
                     }}>
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Filter by priority" />
                         </SelectTrigger>
                         <SelectContent>
+                            <SelectItem value="all">All</SelectItem>
                             {priorities.map(priority => {
                                 return <SelectItem key={priority.id} value={priority.priority}>{priority.priority}</SelectItem>
                             })}
