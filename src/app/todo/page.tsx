@@ -1,4 +1,3 @@
-import {createTodoItem} from "@/../../actions/todo-item";
 import Form from "@/components/form";
 import {fetchPriorities, fetchTodoItems, TPriority, TTodo} from "../../../utils/supabase/service";
 import {DataTable} from "@/app/todo/data-table";
@@ -33,7 +32,7 @@ export default async function Home() {
                                 &#43; Add new item
                             </AccordionTrigger>
                             <AccordionContent>
-                                <Form action={createTodoItem} priorities={priorities} />
+                                <Form type="create" priorities={priorities} />
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>

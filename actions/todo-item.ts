@@ -3,7 +3,7 @@ import { createClient } from "../utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import {cookies} from "next/headers";
 
-const getFormValues = (formData: FormData) => {
+function getFormValues (formData: FormData) {
     const id = formData.get('id');
     const title = formData.get('todo');
     const description = formData.get('description');
@@ -13,13 +13,12 @@ const getFormValues = (formData: FormData) => {
     return { id, title, description, deadline_at: deadlineAt, priority };
 }
 
-export const createTodoItem = async (formData: FormData) => {
+export async function createTodoItem (formData: FormData) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
     const { title, description, deadline_at, priority } = getFormValues(formData);
     if (!title) {
-        // TODO: title is required
-        return;
+        return { error: 'Title is required' };
     }
 
     const { data, error } = await supabase.from('todos').insert({
@@ -31,15 +30,16 @@ export const createTodoItem = async (formData: FormData) => {
     });
 
     revalidatePath('/todo');
+    // TODO: log full error
+    return { error: error?.message ?? '' };
 }
 
-export const editTodoItem = async (formData: FormData) => {
+export async function editTodoItem (formData: FormData) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
     const { id, title, description, deadline_at, priority } = getFormValues(formData);
     if (!title) {
-        // TODO: title is required
-        return;
+        return { error: 'Title is required' };
     }
 
     const { data, error } = await supabase.from('todos').update({
@@ -49,21 +49,21 @@ export const editTodoItem = async (formData: FormData) => {
         priority: priority,
     }).match({ id: id });
 
-    // revalidatePath(`/todo/${id}`);
     revalidatePath(`/todo`);
+    // TODO: log full error
+    return { error: error?.message ?? '' };
 }
 
-export const toggleItemAccomplishedStatus = async (todoItemId: number, isAccomplished: boolean) => {
+export async function toggleItemAccomplishedStatus (todoItemId: number, isAccomplished: boolean) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
     if (!todoItemId) {
-        // TODO: bad todo item id
-        return;
+        return { error: `Todo item id ${todoItemId} is invalid` };
     }
 
     const { error, data } = await supabase.from('todos').update({
         is_accomplished: isAccomplished,
     }).match({ id: todoItemId });
 
-    return error;
+    return { error };
 }

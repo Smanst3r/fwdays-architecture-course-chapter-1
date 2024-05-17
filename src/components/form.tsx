@@ -1,29 +1,71 @@
+"use client";
 import {TPriority} from "../../utils/supabase/service";
 import {formatDate} from "../../utils/utils";
 import {TTodoItemGridData} from "@/app/todo/page";
+import SubmitButton from "@/app/submit-button";
+import {useState} from 'react';
+import {createTodoItem, editTodoItem} from "../../actions/todo-item";
 
 type TProps = {
-    action: (formData: FormData) => void,
-    todoItem?: Omit<TTodoItemGridData, 'priorityData'>|undefined
+    type: 'create' | 'edit'
+    todoItem?: Omit<TTodoItemGridData, 'priorityData'> | undefined
     priorities: TPriority[]
     FormFooter?: React.ReactNode
 }
 
-export const Form: React.FC<TProps> = ({ action, todoItem, priorities, FormFooter }) => {
-    return <form action={action} className="">
-        <input type="hidden" name="id" value={todoItem && todoItem.id} />
+type FormState = {
+    loading: boolean
+    error: string
+    isOk: boolean
+};
+
+const initialState: FormState = {
+    error: '',
+    isOk: false,
+    loading: false
+};
+
+const useFormAction = (action: (formData: FormData) => Promise<{ error: string }>, initialState: FormState) => {
+    const [state, setState] = useState<FormState>(initialState);
+
+    const formAction = async (formData: FormData) => {
+        setState({...state, error: '', loading: true});
+        try {
+            const result = await action(formData);
+            setState({loading: false, error: result.error, isOk: Boolean(!result.error)});
+        } catch (error) {
+            setState({loading: false, error: 'An unexpected error occurred', isOk: false});
+        }
+    };
+
+    return [state, formAction] as const;
+};
+
+export const Form: React.FC<TProps> = ({type, todoItem, priorities, FormFooter}) => {
+    const [state, formAction] = useFormAction(type === 'create' ? createTodoItem : editTodoItem, initialState);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const formData = new FormData(e.target as HTMLFormElement);
+        await formAction(formData);
+    };
+
+    return <form onSubmit={handleSubmit}>
+        <input type="hidden" name="id" value={todoItem && todoItem.id}/>
         <label htmlFor="todo" className="">Title {}</label>
         <input type="text"
                name="todo"
+               disabled={state.loading}
                id="todo"
                placeholder="Title..."
                required
                defaultValue={todoItem && todoItem.todo}
-               className="w-full text-grey-darker" />
+               className="w-full text-grey-darker"/>
         <div className="mt-2">
             <label htmlFor="description">Description</label>
             <textarea name="description"
                       id="description"
+                      disabled={state.loading}
                       cols={30}
                       rows={4}
                       defaultValue={todoItem && todoItem.description}
@@ -37,24 +79,30 @@ export const Form: React.FC<TProps> = ({ action, todoItem, priorities, FormFoote
                 <input type="date"
                        id="deadline"
                        name="deadline_at"
+                       disabled={state.loading}
                        defaultValue={todoItem && formatDate(new Date(todoItem.deadline_at), 'yyyy-mm-dd')}
-                       required />
+                       required/>
             </div>
             <div>
                 <label htmlFor="deadline" className="block">
                     Priority
                 </label>
-                <select name="priority" id="priority" defaultValue={todoItem && todoItem.priority}>
+                <select name="priority" id="priority" defaultValue={todoItem && todoItem.priority}
+                        disabled={state.loading}>
                     {priorities.map(p => {
                         return <option key={p.id} value={p.id}>{p.priority}</option>
                     })}
                 </select>
             </div>
         </div>
-        <button type="submit"
-                className="text-white mt-2 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+        <div className={`rounded p-2 mt-2 min-h-10 ${state.error ? 'text-red-700 bg-red-200 rounded' : ''} ${state.isOk ? 'bg-green-200 text-green-800' : ''}`}>
+            {state.error || state.isOk && <span>
+                {state.error || 'Todo item saved successfully'}
+            </span>}
+        </div>
+        <SubmitButton>
             {todoItem ? 'Save todo' : 'Add todo'}
-        </button>
+        </SubmitButton>
         {FormFooter && FormFooter}
     </form>
 };
