@@ -25,6 +25,12 @@ import {TPriority} from "../../../utils/supabase/service";
 import Link from "next/link";
 import {RiExternalLinkFill} from "react-icons/ri";
 
+const priorityClass = {
+    'low': 'inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10',
+    'medium': 'inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20',
+    'high': 'inline-flex items-center rounded-md bg-pink-50 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10'
+};
+
 export const columns: ColumnDef<TTodoItemGridData>[] = [
     {
         accessorKey: 'todo',
@@ -50,14 +56,20 @@ export const columns: ColumnDef<TTodoItemGridData>[] = [
         accessorFn: (gridItem) => gridItem.priorityData?.priority ?? 'n/a',
         header: ({column}) => {
             return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
+                <Button variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Priority
                     <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
+        },
+        cell: (props) => {
+            const priorityData = props.row.original.priorityData;
+            if (!priorityData) {
+                return 'n/a';
+            }
+
+            return <span className={priorityClass[priorityData.priority]}>{priorityData.priority}</span>
         },
         sortingFn: (rowA, rowB) => {
             // desc order
@@ -69,14 +81,26 @@ export const columns: ColumnDef<TTodoItemGridData>[] = [
     {
         accessorKey: 'deadline_at',
         accessorFn: (gridItem) => gridItem.deadline_at,
-        cell: props => <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger>{formatDate(new Date(props.row.original.deadline_at))}</TooltipTrigger>
-                <TooltipContent>
-                    {props.row.original.deadline_at}
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>,
+        cell: props => {
+            const deadlineAt = props.row.original.deadline_at;
+            const deadlineDate = new Date(deadlineAt);
+            const todayDate = new Date();
+            const millisecondLeft = deadlineDate.getTime() - todayDate.getTime();
+            const daysLeft = Math.ceil(millisecondLeft / (1000 * 3600 * 24));
+            const isDeadlineExpired = daysLeft < 0;
+
+            return <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger>
+                        {formatDate(deadlineDate)}
+                        {isDeadlineExpired && <span className="text-red-700 text-xs"> expired</span>}
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        {deadlineAt}
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+        },
         header: ({column}) => {
             return (
                 <Button variant="ghost"
