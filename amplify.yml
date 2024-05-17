@@ -3,14 +3,14 @@ frontend:
   phases:
     preBuild:
       commands:
-        - cd todo-list
         - npm install
     build:
       commands:
         - npm run build
   artifacts:
-    baseDirectory: /todo-list/.next
+    baseDirectory: .next
     files:
       - '**/*'
   cache:
-    paths: []
+    paths:
+      - node_modules/**/*
